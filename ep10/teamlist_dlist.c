@@ -5,7 +5,7 @@
 
 typedef struct node {
 
-    Time *time;
+    Team *team;
     struct node *next;
     struct node *prev;
 
@@ -16,7 +16,7 @@ struct teamlist {
     Node *first;
     Node *last;
     int size;
-}
+};
 
 TeamList *tl_create(void) {
 
@@ -33,7 +33,7 @@ TeamList *tl_create(void) {
     return tl;
 }
 
-void tl_append(TeamList *tl, Time *t) {
+void tl_append(TeamList *tl, Team *t) {
 
     Node *n = malloc(sizeof(Node));
 
@@ -67,7 +67,7 @@ void tl_append(TeamList *tl, Time *t) {
             Node *cur = tl->first;
             for (int j = 0; j < i; j++)
                 cur = cur->next;
-            return cur->time;
+            return cur->team;
     }
 
     void tl_free(TeamList *tl) {

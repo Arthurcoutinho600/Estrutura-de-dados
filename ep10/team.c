@@ -2,7 +2,7 @@
 #include <string.h>
 #include "team.h"
 
-struct time {
+struct team {
 
     int id;
     char *name;
@@ -13,59 +13,68 @@ struct time {
     int gols_conceded;
 
 
-}
+};
 
-Time *team_create(int id, const char, *nome) {
+Team *team_create(int id, const char *name) {
+ Team *team = malloc(sizeof(Team));
 
-    Time *t = malloc(sizeof(Time));
+    if (team == NULL) 
+    
+    return NULL;
 
-    if (t == NULL) return NULL;
+    if (name == NULL) {
 
-    t->name = malloc(strlen(name) + 1);
+        name = "";
 
-    if (t->name == NULL) {
+    }
 
-        free(t);
+    team->name = malloc(strlen(name) + 1);
+
+    if (team->name == NULL) {
+
+        free(team);
+
         return NULL;
     }
     
-    strcpy(t->name, name);
+    strcpy(team->name, name);
 
-    t->id = id;
-    t->wins = 0;
-    t->draws = 0;
-    t->losses = 0;
-    t->gols_scored = 0;
-    t->gols_conceded = 0;
+    team->id = id;
+    team->wins = 0;
+    team->draws = 0;
+    team->losses = 0;
+    team->gols_scored = 0;
+    team->gols_conceded = 0;
 
-    return t;
+    return team;
+
 }
-    int team_get_id(const Time *t) {
-        return t-> id;
+    int team_get_id(const Team *team) {
+        return team-> id;
     }
-    const char *team_get_name(const Time *t) {
-        return t->name;
+    const char *team_get_name(const Team *team) {
+        return team->name;
     }
-    int team_get_wins(const Time *t) {
-        return t->wins;
+    int team_get_wins(const Team *team) {
+        return team->wins;
     }
-    int team_get_draws(const Time *t) {
-        return t->draws;
+    int team_get_draws(const Team *team) {
+        return team->draws;
     }
-    int team_get_losses(const Time *t) {
-        return t->losses;
+    int team_get_losses(const Team *team) {
+        return team->losses;
     }
-    int team_get_gols_scored(const Time *t) {
-        return t->gols_scored;
+    int team_get_gols_scored(const Team *team) {
+        return team->gols_scored;
     }
-    int team_get_gols_conceded(const Time *t) {
-        return t->gols_conceded;
+    int team_get_gols_conceded(const Team *team) {
+        return team->gols_conceded;
     }
 
-    void team_destroy(Time *t) {
+    void team_destroy(Team *team) {
 
-        if (t == NULL) 
+        if (team == NULL) 
         return;
-        free(t->name);
-        free(t);
+        free(team->name);
+        free(team);
     }

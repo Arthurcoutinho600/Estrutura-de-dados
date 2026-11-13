@@ -1,13 +1,10 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include "team.h"
 #include "teamlist.h"
 
-#define INITIAL_CAPACITY 4
 
-struct teamList {
+struct teamlist {
 
-    Team **data;
+    Team **teams;
     int size;
     int capacity;
 
@@ -17,77 +14,102 @@ TeamList *tl_create(void) {
 
     TeamList *tl = malloc(sizeof(TeamList));
 
-    if (tl == NULL)
+    if (tl == NULL) {
 
         return NULL;
 
-    tl->data = malloc(INITIAL_CAPACITY * sizeof(Time *));
+    }
 
-    if (tl->data == NULL) {
+    tl->size = 0;
+    tl->capacity = 2;
+
+    tl->teams = malloc(tl->capacity * sizeof(Team *));
+
+    if (tl->teams == NULL) {
         
         free(tl);
         return NULL;
     
         }
-        tl->size = 0;
-        tl->capacity = INITIAL_CAPACITY;
         return tl;
 
     }
 
-    void tl_append(TeamList *tl, Time *t) {
+    void tl_append(TeamList *tl, Team *team) {
+
+        Team **aux;
+        int new_capacity;
     
-        if (tl->size == tl->capacity) {
+        if (tl == NULL || team == NULL) {
             
-            int new_cap = tl->capacity * 2;
-            Team **tmp = realloc(tl->data, new_cap * sizeof(Team *));
-            if (tmp == NULL) {
-            
-                fprintf(stderr, "erro ao alocar memoria\n");
-                exit(1);
-
-            }
-
-            tl->data = tmp;
-            tl->capacity = new_cap;
-
-            }
-        
-            tl->data[tl->size++] = t;
-
-        
-        }
-    
-    int tl_size(const TeamList *tl) {
-    
-        return tl->size;
-
-    
-    }
-
-    Team *tl_get(const TeamList *tl, int i) {
-    
-        if (i < 0 || i >= tl->size)
-            
-            return NULL;
-        
-        return tl->data[i];
-    
-    
-    }
-
-    void tl_free(TeamList *tl) {
-    
-        if (tl == NULL)
-
             return;
 
-        for (int i = 0; i < tl->size; i++)
+        }
+    
+        if (tl->size == tl->capacity) {
 
-            team_destroy(tl->data[i]);
-        
-        free(tl->data);
-        free(tl);
-        
-        
+        new_capacity = tl->capacity * 2;
+
+        aux = realloc(tl->teams, new_capacity * sizeof(Team *));
+
+        if (aux == NULL) {
+
+            return;
+        }
+
+        tl->teams = aux;
+        tl->capacity = new_capacity;
+
+        }
+
+        tl->teams[tl->size] = team;
+
+        tl->size++;
+
+
     }
+
+    int tl_size(const TeamList *tl) {
+
+        if (tl == NULL) {
+
+            return 0;
+
+        }
+
+        return tl->size;
+
+    }
+
+Team *tl_get(const TeamList *tl, int index) {
+
+
+    if (tl == NULL || index < 0 || index >= tl->size) {
+
+        return NULL;
+
+    }
+
+    return tl->teams[index];
+
+
+}
+
+void tl_free(TeamList *tl) {
+
+    int i;
+
+    if (tl != NULL) {
+
+        for (i = 0; i < tl->size; i++ ) {
+
+            team_free(tl->teams[i]);
+
+        }
+
+        free(tl->teams);
+        free(tl);
+
+    }
+
+}
